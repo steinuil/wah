@@ -1,0 +1,10 @@
+[package]
+edition = "2021"
+name = "wah"
+version = "0.1.0"
+
+[dependencies]
+console = "0.15.0"
+crossbeam-channel = "0.5.2"
+ropey = "1.3.2"
+signal-hook = "0.3.13"
