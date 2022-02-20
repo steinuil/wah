@@ -74,11 +74,11 @@ impl Editor {
         }
 
         let tako_pos = Position {
-            col: width as usize - 43,
-            row: height as usize - 19,
+            col: width as usize - tako::TAKODACHI_WIDTH - 1,
+            row: height as usize - tako::TAKODACHI_HEIGHT - 2,
         };
 
-        tako::draw_tako(term, tako_pos)?;
+        tako::draw_takodachi(term, tako_pos)?;
 
         term.move_cursor_to(0, height as usize)?;
 

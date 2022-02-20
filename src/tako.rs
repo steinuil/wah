@@ -1,53 +1,77 @@
-use std::io;
-use std::io::Write;
+use std::io::{self, Write};
 
 use console::Term;
 
 use crate::Position;
 
-const COLORS: [(u8, u8, u8); 4] = [
-    (45, 42, 59),
-    (145, 126, 156),
-    (125, 111, 134),
-    (209, 147, 150),
+pub struct Color {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+
+const COLOR_OUTLINE: Color = Color {
+    r: 45,
+    g: 42,
+    b: 59,
+};
+
+const COLOR_HIGHLIGHTS: Color = Color {
+    r: 145,
+    g: 126,
+    b: 156,
+};
+
+const COLOR_FILL: Color = Color {
+    r: 125,
+    g: 111,
+    b: 134,
+};
+
+const COLOR_BLUSH: Color = Color {
+    r: 209,
+    g: 147,
+    b: 150,
+};
+
+pub const TAKODACHI_WIDTH: usize = 42;
+pub const TAKODACHI_HEIGHT: usize = 16;
+
+const TAKO: [&[u8; TAKODACHI_WIDTH / 2]; TAKODACHI_HEIGHT] = [
+    b"__###____###____###__",
+    b"_#-==#_##===##_#===#_",
+    b"_#-===#=======#====#_",
+    b"__#-====-=========#__",
+    b"___#-==-=========#___",
+    b"___#-============#___",
+    b"___#===##===##===#___",
+    b"__#-=##=======##==#__",
+    b"__#-==============#__",
+    b"__#-=*=#==#==#=*==#__",
+    b"_#-=====##=##======#_",
+    b"_#-================#_",
+    b"#-==================#",
+    b"#-==================#",
+    b"_#==##===###===##==#_",
+    b"__##__###___###__##__",
 ];
 
-const TAKO: [&[u8; 21]; 17] = [
-    b"__111___11111___111__",
-    b"_12331_1333331_13331_",
-    b"_1233313333333133331_",
-    b"__12333333333333331__",
-    b"___133333333333331___",
-    b"___133333333333331___",
-    b"___133311333113331___",
-    b"__12311333333311331__",
-    b"__12333333333333331__",
-    b"__12343133133134331__",
-    b"__12333311311333331__",
-    b"__12333333333333331__",
-    b"_1233333333333333331_",
-    b"_1233333333333333331_",
-    b"123333333333333333331",
-    b"123311333111333113331",
-    b"_111__111___111__111_",
-];
-
-pub fn draw_tako(term: &mut Term, orig: Position) -> io::Result<()> {
+pub fn draw_takodachi(term: &mut Term, orig: Position) -> io::Result<()> {
     for (i, line) in TAKO.iter().enumerate() {
         term.move_cursor_to(orig.col, orig.row + i)?;
         for char in line.iter() {
             let color = match char {
-                0x31 => COLORS[0],
-                0x32 => COLORS[1],
-                0x33 => COLORS[2],
-                0x34 => COLORS[3],
+                0x23 => COLOR_OUTLINE,
+                0x2D => COLOR_HIGHLIGHTS,
+                0x3D => COLOR_FILL,
+                0x2A => COLOR_BLUSH,
                 _ => {
                     term.move_cursor_right(2)?;
                     continue;
                 }
             };
 
-            write!(term, "\x1b[48;2;{};{};{}m  ", color.0, color.1, color.2)?;
+            write!(term, "\x1b[48;2;{};{};{}m  ", color.r, color.g, color.b)?;
         }
     }
 
