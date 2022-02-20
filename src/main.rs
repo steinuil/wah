@@ -182,5 +182,9 @@ fn main() -> Result<(), io::Error> {
     term.clear_screen()?;
     term.flush()?;
 
+    println!("                  bye bye!");
+    println!("                     /\n");
+    tako::print_takodachi();
+
     Ok(())
 }
